@@ -75,7 +75,7 @@ Use ponto final (.) para separar a casa decimal.
       numero_de_saques, extrato, data_ultimo_saque, saldo = funcao_saque(numero_de_saques, extrato, data_ultimo_saque, saldo)
  
   elif opcao == 3:
-    print(extrato)
+    print("Não foram eralizadas movimentações." if not extrato else extrato)
     print(f"Seu saldo atual é de R$ {saldo:.2f}")
   elif opcao == 0:
     break
