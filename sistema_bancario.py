@@ -23,8 +23,7 @@ Use ponto final (.) para separar a casa decimal.
         data_ultimo_saque = data_formatada
         saldo -= saque
         numero_de_saques += 1
-        return numero_de_saques, extrato, data_ultimo_saque, saldo
-        break      
+        return numero_de_saques, extrato, data_ultimo_saque, saldo   
     except ValueError:
       print("Valor inválido! Use apenas números para os valores e separe o real do centavo com ponto final (.)")
 
