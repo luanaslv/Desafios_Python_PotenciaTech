@@ -1,12 +1,7 @@
 from datetime import datetime
 
 #como o saque aparece em duas situações diferentes, criei uma função.
-def funcao_saque():
-  global numero_de_saques
-  global extrato
-  global data_ultimo_saque
-  global saldo
-
+def funcao_saque(numero_de_saques, extrato, data_ultimo_saque, saldo):
   print("""Bem vindo(a) a sua área de saque.
 Segue modelo de como deve ser inserido o valor a ser retirado: 45.67
 Use ponto final (.) para separar a casa decimal.
@@ -16,6 +11,8 @@ Use ponto final (.) para separar a casa decimal.
       saque = float(input("Insira o valor que deseja sacar: "))
       if saque > 500:
         print("Limite máximo por saque é de R$ 500.00\n")
+      elif saque < 0:
+        print("Não se deve sacar valores negativos.\n")
       elif saque > saldo:
         print(f"Você não possue saldo suficiente. Seu saldo atual é de {saldo:.2f}.\n")
       elif numero_de_saques == 3:
@@ -26,6 +23,7 @@ Use ponto final (.) para separar a casa decimal.
         data_ultimo_saque = data_formatada
         saldo -= saque
         numero_de_saques += 1
+        return numero_de_saques, extrato, data_ultimo_saque, saldo
         break      
     except ValueError:
       print("Valor inválido! Use apenas números para os valores e separe o real do centavo com ponto final (.)")
@@ -72,10 +70,10 @@ Use ponto final (.) para separar a casa decimal.
   elif opcao == 2:
     if data_ultimo_saque != data_formatada:
       numero_de_saques = 0
-      funcao_saque()
+      numero_de_saques, extrato, data_ultimo_saque, saldo = funcao_saque(numero_de_saques, extrato, data_ultimo_saque, saldo)
 
     else:
-      funcao_saque()
+      numero_de_saques, extrato, data_ultimo_saque, saldo = funcao_saque(numero_de_saques, extrato, data_ultimo_saque, saldo)
  
   elif opcao == 3:
     print(extrato)
