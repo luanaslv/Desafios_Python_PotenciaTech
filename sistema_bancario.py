@@ -65,7 +65,7 @@ Use ponto final (.) para separar a casa decimal.
         else:
           print("O valor para depósito precisa ser maior que zero.\n")
       except ValueError:
-          print("Valor inválido! Use apenas números para os valores e separe o real do centavo com ponto final (.)")
+          print("Valor inválido! Use apenas números para os valores e separe o real do centavo com ponto final (.)\n")
   
   elif opcao == 2:
     if data_ultimo_saque != data_formatada:
