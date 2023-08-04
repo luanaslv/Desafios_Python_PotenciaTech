@@ -7,18 +7,17 @@ def funcao_saque():
   global data_ultimo_saque
   global saldo
 
-  print("""
-  Bem vindo(a) a sua área de saque.
-  Segue modelo de como deve ser inserido o valor a ser retirado: 45.67
-  Use ponto final (.) para separar a casa decimal.
+  print("""Bem vindo(a) a sua área de saque.
+Segue modelo de como deve ser inserido o valor a ser retirado: 45.67
+Use ponto final (.) para separar a casa decimal.
   """)
   while True:
     try:
       saque = float(input("Insira o valor que deseja sacar: "))
       if saque > 500:
-        print("Limite máximo por saque é de R$ 500.00")
+        print("Limite máximo por saque é de R$ 500.00\n")
       elif saque > saldo:
-        print(f"Você não possue saldo suficiente. Seu saldo atual é de {saldo}.")
+        print(f"Você não possue saldo suficiente. Seu saldo atual é de {saldo:.2f}.\n")
       else:
         saque_formatado = f"R$ {saque:.2f}"
         extrato = extrato + "Saque:    " + data_formatada.ljust(25, '-') + saque_formatado + "\n"
@@ -51,10 +50,9 @@ while True:
   opcao = int(input(menu))
 
   if opcao == 1:
-    print("""
-    Bem vindo(a) a sua área de depósito.
-    Segue modelo de como deve ser inserido o valor depositado: 45.67
-    Use ponto final (.) para separar a casa decimal.
+    print("""Bem vindo(a) a sua área de depósito.
+Segue modelo de como deve ser inserido o valor depositado: 45.67
+Use ponto final (.) para separar a casa decimal.
     """)
     while True:
       try:
