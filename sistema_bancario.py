@@ -18,6 +18,8 @@ Use ponto final (.) para separar a casa decimal.
         print("Limite máximo por saque é de R$ 500.00\n")
       elif saque > saldo:
         print(f"Você não possue saldo suficiente. Seu saldo atual é de {saldo:.2f}.\n")
+      elif numero_de_saques == 3:
+        print("Você alcançou seu limite de saque diário. Retornar amanhã.")
       else:
         saque_formatado = f"R$ {saque:.2f}"
         extrato = extrato + "Saque:    " + data_formatada.ljust(25, '-') + saque_formatado + "\n"
@@ -73,10 +75,7 @@ Use ponto final (.) para separar a casa decimal.
       funcao_saque()
 
     else:
-      if numero_de_saques == 3:
-        print("Você alcançou seu limite de saque diário. Retornar amanhã.")
-      else:
-        funcao_saque()
+      funcao_saque()
  
   elif opcao == 3:
     print(extrato)
