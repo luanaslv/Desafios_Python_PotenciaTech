@@ -57,10 +57,13 @@ Use ponto final (.) para separar a casa decimal.
     while True:
       try:
         deposito = float(input("Insira o valor que deseja depositar: "))
-        deposito_formatado = f"R$ {deposito:.2f}"
-        extrato = extrato + "Depósito: " + data_formatada.ljust(25, '-') + deposito_formatado + "\n"
-        saldo += deposito
-        break   
+        if deposito > 0:
+          deposito_formatado = f"R$ {deposito:.2f}"
+          extrato = extrato + "Depósito: " + data_formatada.ljust(25, '-') + deposito_formatado + "\n"
+          saldo += deposito
+          break
+        else:
+          print("O valor para depósito precisa ser maior que zero.\n")
       except ValueError:
           print("Valor inválido! Use apenas números para os valores e separe o real do centavo com ponto final (.)")
   
