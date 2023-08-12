@@ -7,11 +7,12 @@ def funcao_verifica_valor():
             if valor < 0:
                 print("O valor precisa ser maior que zero.\n")
             else:
-                return valor
+                valor_formatado = f"R$ {valor:.2f}"
+                return valor,valor_formatado
         except ValueError:
             print("Valor inválido! Use apenas números para os valores e separe o real do centavo com ponto final (.)")    
 
-def funcao_saque(valor, extrato, data_formatada, saldo, numero_de_saques, limite_de_saques, limite):
+def funcao_saque(valor, extrato, data_formatada, saldo, numero_de_saques, limite_de_saques, limite, valor_formatado):
     if valor > limite:
         print("Limite máximo por saque é de R$ 500.00\n")
     elif valor > saldo:
@@ -19,16 +20,14 @@ def funcao_saque(valor, extrato, data_formatada, saldo, numero_de_saques, limite
     elif numero_de_saques == limite_de_saques:
         print("Você alcançou seu limite de saque diário. Retornar amanhã.")
     else:
-        saque_formatado = f"R$ {valor:.2f}"
-        extrato = extrato + "Saque:    " + data_formatada.ljust(25, '-') + saque_formatado + "\n"
+        extrato = extrato + "Saque:    " + data_formatada.ljust(25, '-') + valor_formatado + "\n"
         data_ultimo_saque = data_formatada
         saldo -= valor
         numero_de_saques += 1
         return numero_de_saques, extrato, data_ultimo_saque, saldo   
 
-def funcao_depositar(valor,extrato,saldo,data_formatada):
-    deposito_formatado = f"R$ {valor:.2f}"
-    extrato = extrato + "Depósito: " + data_formatada.ljust(25, '-') + deposito_formatado + "\n"
+def funcao_depositar(valor,extrato,saldo,data_formatada,valor_formatado):
+    extrato = extrato + "Depósito: " + data_formatada.ljust(25, '-') + valor_formatado + "\n"
     saldo += valor
     return saldo,extrato
             
@@ -57,6 +56,7 @@ extrato = ""
 numero_de_saques = 0
 limite_de_saques = 3
 data_ultimo_saque = ""
+valor_formatado = ""
 
 while True:
     data_atual = datetime.now().date()
@@ -66,14 +66,14 @@ while True:
     if opcao == 1:
         menu_depositar()
         valor = funcao_verifica_valor()
-        saldo,extrato = funcao_depositar(valor,extrato,saldo,data_formatada)  
+        saldo,extrato = funcao_depositar(valor,extrato,saldo,data_formatada,valor_formatado)  
        
     elif opcao == 2:
         menu_sacar()
-        valor = funcao_verifica_valor
+        valor, valor_formatado = funcao_verifica_valor
         if data_ultimo_saque != data_formatada:
             numero_de_saques = 0
-        numero_de_saques, extrato, data_ultimo_saque, saldo = funcao_saque(valor = valor, extrato = extrato, data_formatada = data_formatada, saldo = saldo, numero_de_saques = numero_de_saques, limite_de_saques = limite_de_saques, limite = limite)
+        numero_de_saques, extrato, data_ultimo_saque, saldo = funcao_saque(valor = valor, extrato = extrato, data_formatada = data_formatada, saldo = saldo, numero_de_saques = numero_de_saques, limite_de_saques = limite_de_saques, limite = limite, valor_formatado = valor_formatado)
     
     elif opcao == 3:
         print("Não foram eralizadas movimentações." if not extrato else extrato)
