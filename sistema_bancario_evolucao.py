@@ -1,5 +1,9 @@
 from datetime import datetime
 
+def extrato(saldo,extrato):
+    saida_texto("Não foram realizadas movimentações." if not extrato else extrato)
+    saida_texto(f"Seu saldo atual é de R$ {saldo:.2f}")
+
 def funcao_verifica_valor():
     while True:
         try:
@@ -48,7 +52,7 @@ Olá! Estamos acessando sua conta bancária, digite a opção que deseja, sendo:
 '''
 saldo = 0
 limite = 500
-extrato = "EXTRATO BANCÁRIO:\n"
+extrato = ""
 numero_de_saques = 0
 limite_de_saques = 3
 data_ultimo_saque = ""
@@ -71,11 +75,10 @@ while True:
             numero_de_saques = 0
         status = funcao_verifica_saque(valor, saldo, numero_de_saques, limite_de_saques, limite)
         if status == True and valor != 0:
-            numero_de_saques, extrato, data_ultimo_saque, saldo = funcao_saque(valor, extrato, data_formatada, saldo, numero_de_saques)
+            numero_de_saques, extrato, data_ultimo_saque, saldo = funcao_saque(valor=valor, extrato=extrato, data_formatada=data_formatada, saldo=saldo, numero_de_saques=numero_de_saques)
     
     elif opcao == 3:
-        print("Não foram realizadas movimentações." if not extrato else extrato)
-        print(f"Seu saldo atual é de R$ {saldo:.2f}")
+        extrato(saldo, extrato=extrato)
     elif opcao == 0:
         break
     else:
