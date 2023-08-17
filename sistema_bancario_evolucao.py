@@ -61,8 +61,7 @@ def cadastro_data_nascimento():
         except ValueError:
             saida_texto("Valor inválido! Insira apenas números.")
 def cadastro_endereco():
-    saida_texto("\nDados do endereço:")
-    logradouro = input("Digite seu logradouro: ")
+    logradouro = input("\nDigite seu logradouro: ")
     numero = input("Digite seu número: ")
     bairro = input("Digite seu bairro: ")
     cidade = input("Digite seu cidade: ")
