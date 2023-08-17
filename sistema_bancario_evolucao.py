@@ -1,6 +1,6 @@
 from datetime import datetime
 
-def funcao_gerar_extrato(saldo,extrato):
+def funcao_gerar_extrato(saldo,/,*,extrato):
     saida_texto("Não foram realizadas movimentações." if not extrato else extrato)
     saida_texto(f"Seu saldo atual é de R$ {saldo:.2f}")
 
@@ -25,7 +25,7 @@ def funcao_verifica_saque(valor, saldo, numero_de_saques, limite_de_saques, limi
     else:
         return True
 
-def funcao_saque(valor, extrato, data_formatada, saldo, numero_de_saques):
+def funcao_saque(*, valor, extrato, data_formatada, saldo, numero_de_saques):
     extrato = extrato + "Saque:    " + data_formatada.ljust(25, '-') + f"R$ {valor:.2f}" + "\n"
     ultima_data_de_saque = data_formatada
     saldo -= valor
@@ -33,7 +33,7 @@ def funcao_saque(valor, extrato, data_formatada, saldo, numero_de_saques):
     saida_texto("Operação realizada com sucesso!")
     return numero_de_saques, extrato, ultima_data_de_saque, saldo   
 
-def funcao_depositar(valor, extrato, saldo, data_formatada):
+def funcao_depositar(valor, extrato, saldo, data_formatada, /):
     extrato = extrato + "Depósito: " + data_formatada.ljust(25, '-') + f"R$ {valor:.2f}" + "\n"
     saldo += valor
     saida_texto("Operação realizada com sucesso!")
@@ -80,16 +80,21 @@ def cadastro_cpf():
                 saida_texto("Quantidade de caracter inválido. Digite novamente.")
         except ValueError:
             saida_texto("Valor inválido! Insira apenas números.")
-def funcao_verifica_cpf(lista_usuarios):
+def funcao_verifica_cpf(lista_usuarios,opcao):
     cpf = cadastro_cpf()
     status = True
     for usuario in lista_usuarios:
         if usuario["CPF"] == cpf:
             status = False
+            break
+    if opcao == 4:
+        return cpf, status
+    else:
+        if status == False:
             return cpf, status, usuario["Nome"]
-    return cpf, status
+        else:
+            return cpf, status, None
     
-
                  
 menu = '''
 Olá! Estamos acessando sua conta bancária, digite a opção que deseja, sendo:
@@ -114,51 +119,52 @@ numero_conta = 1
 while True:
     data_atual = datetime.now().date()
     data_formatada = data_atual.strftime("%d/%m/%Y")
-    opcao = int(input(menu))
+    try:
+        opcao = int(input(menu))
 
-    if opcao == 1:
-        saida_texto("\nBem vindo(a) a sua área de depósito.\nSegue modelo de como deve ser inserido o valor a ser depositado: 45.67\nUse ponto final (.) para separar a casa decimal.")
-        valor = funcao_verifica_valor()
-        if valor != 0:
-            saldo, extrato = funcao_depositar(valor, extrato, saldo, data_formatada)     
-    elif opcao == 2:
-        saida_texto("\nBem vindo(a) a sua área de saque.\nSegue modelo de como deve ser inserido o valor a ser retirado: 45.67\nUse ponto final (.) para separar a casa decimal.")
-        valor = funcao_verifica_valor()
-        if ultima_data_de_saque != data_formatada:
-            numero_de_saques = 0
-        status = funcao_verifica_saque(valor, saldo, numero_de_saques, limite_de_saques, limite)
-        if status == True and valor != 0:
-            numero_de_saques, extrato, ultima_data_de_saque, saldo = funcao_saque(valor=valor, extrato=extrato, data_formatada=data_formatada, saldo=saldo, numero_de_saques=numero_de_saques)
-    elif opcao == 3:
-        funcao_gerar_extrato(saldo, extrato=extrato)
-    elif opcao == 4:
-        saida_texto("\nBem vindo(a)!\nA seguir iremos captar seus dados pessoais, esteja com documentação em mãos para facilitar seu cadastro.")
-        dados_usuario = {}
-        cpf, status_cpf = funcao_verifica_cpf(lista_usuarios)
-        if status_cpf == True:
-            dados_usuario["CPF"] = cpf
-            dados_usuario["Nome"] = cadastro_nome()
-            dados_usuario["Nascimento"] = cadastro_data_nascimento()
-            dados_usuario["Endereço"] = cadastro_endereco()
-            lista_usuarios.append(dados_usuario)
-            saida_texto(f"\nObrigado Senhor(a) {dados_usuario['Nome']}. Seu cadastro foi realizado com sucesso!")
+        if opcao == 1:
+            saida_texto("\nBem vindo(a) a sua área de depósito.\nSegue modelo de como deve ser inserido o valor a ser depositado: 45.67\nUse ponto final (.) para separar a casa decimal.")
+            valor = funcao_verifica_valor()
+            if valor != 0:
+                saldo, extrato = funcao_depositar(valor, extrato, saldo, data_formatada)     
+        elif opcao == 2:
+            saida_texto("\nBem vindo(a) a sua área de saque.\nSegue modelo de como deve ser inserido o valor a ser retirado: 45.67\nUse ponto final (.) para separar a casa decimal.")
+            valor = funcao_verifica_valor()
+            if ultima_data_de_saque != data_formatada:
+                numero_de_saques = 0
+            status = funcao_verifica_saque(valor, saldo, numero_de_saques, limite_de_saques, limite)
+            if status == True and valor != 0:
+                numero_de_saques, extrato, ultima_data_de_saque, saldo = funcao_saque(valor=valor, extrato=extrato, data_formatada=data_formatada, saldo=saldo, numero_de_saques=numero_de_saques)
+        elif opcao == 3:
+            funcao_gerar_extrato(saldo, extrato=extrato)
+        elif opcao == 4:
+            saida_texto("\nBem vindo(a)!\nA seguir iremos captar seus dados pessoais, esteja com documentação em mãos para facilitar seu cadastro.")
+            cpf, status_cpf = funcao_verifica_cpf(lista_usuarios, opcao)
+            if status_cpf == True:
+                dados_usuario = {
+                    "CPF": cpf,
+                    "Nome": cadastro_nome(),
+                    "Nascimento": cadastro_data_nascimento(),
+                    "Endereço": cadastro_endereco()
+                }
+                lista_usuarios.append(dados_usuario)
+                saida_texto(f"\nObrigado Senhor(a) {dados_usuario['Nome']}. Seu cadastro foi realizado com sucesso!")
+            else:
+                saida_texto("CPF já cadastrado.")
+        elif opcao == 5:
+            saida_texto("\nBem vindo(a)!\nA seguir iremos criar sua conta, esteja com CPF em mãos para facilitar seu cadastro.")
+            cpf, status_cpf, nome = funcao_verifica_cpf(lista_usuarios, opcao)
+            if status_cpf == False:
+                dados_conta = {"Agência": "0001", "Conta": numero_conta, "CPF": cpf, "Nome": nome}
+                numero_conta += 1
+                lista_contas.append(dados_conta)
+                saida_texto(f"\nObrigado Senhor(a) {nome}. Sua conta foi criada com sucesso!")
+                print(dados_conta)
+            else:
+                saida_texto("CPF não cadastrado. Selecionar a opção 4 do nosso Menu inicial e realizar cadastro do usuário.")
+        elif opcao == 0:
+            break
         else:
-            saida_texto("CPF já cadastrado.")
-    elif opcao == 5:
-        saida_texto("\nBem vindo(a)!\nA seguir iremos criar sua conta, esteja com CPF em mãos para facilitar seu cadastro.")
-        dados_conta = {"Agência": "0001",}
-        cpf, status_cpf, nome = funcao_verifica_cpf(lista_usuarios)
-        if status_cpf == False:
-            dados_conta["Conta"] = numero_conta
-            dados_conta["CPF"] = cpf
-            dados_conta["Nome"] = nome
-            numero_conta += 1
-            lista_contas.append(dados_conta)
-            saida_texto(f"\nObrigado Senhor(a) {nome}. Sua conta foi criada com sucesso!")
-        else:
-            saida_texto("CPF não cadastrado. Selecionar a opção 4 do nosso Menu inicial e realizar cadastro do usuário.")
-    elif opcao == 0:
-        break
-    else:
-        saida_texto("\nOpção inválida, tente novamente!")
-
+            saida_texto("\nOpção inválida, tente novamente!")
+    except ValueError:
+        saida_texto("Valor inválido. Insira apenas números conforme Menu.")
